@@ -1,0 +1,263 @@
+{
+  "geometry_m": {
+    "l1": 0.06,
+    "l2": 0.1,
+    "d": 0.1
+  },
+  "parameters": {
+    "width": 0.08,
+    "height": 0.025,
+    "baseline": 0.09,
+    "center_x": 0.0,
+    "border_margin": 0.005,
+    "speed": 0.01,
+    "rate": 100.0
+  },
+  "angles": "Radians, zero north, positive clockwise; motor 1 left.",
+  "assembly": "Upper tip, widest elbows initially, same elbow mode throughout.",
+  "pen": "Down throughout. N right stem retraced. No approach or homing move.",
+  "timing": "Quintic arc-length timing; rest at every primitive boundary.",
+  "samples": 10665,
+  "duration_s": 106.64,
+  "path_length_m": 0.5681666233208753,
+  "peak_pen_speed_m_s": 0.009999999999999998,
+  "peak_motor_speed_rad_s": [
+    0.20954985455856143,
+    0.17084073718372036
+  ],
+  "start_q_rad": [
+    -0.7896468566962502,
+    0.1515692917741447
+  ],
+  "finish_q_rad": [
+    0.1798920811558209,
+    0.8925968499602277
+  ],
+  "strokes": [
+    {
+      "index": 0,
+      "name": "C upper",
+      "connector": false,
+      "start_sample": 0,
+      "end_sample": 446,
+      "length_m": 0.0237550652036356,
+      "duration_s": 4.46
+    },
+    {
+      "index": 1,
+      "name": "C lower",
+      "connector": false,
+      "start_sample": 446,
+      "end_sample": 892,
+      "length_m": 0.02375506520363561,
+      "duration_s": 4.46
+    },
+    {
+      "index": 2,
+      "name": "C to N",
+      "connector": true,
+      "start_sample": 892,
+      "end_sample": 992,
+      "length_m": 0.005333333333333332,
+      "duration_s": 1.0
+    },
+    {
+      "index": 3,
+      "name": "N left",
+      "connector": false,
+      "start_sample": 992,
+      "end_sample": 1461,
+      "length_m": 0.024999999999999994,
+      "duration_s": 4.69
+    },
+    {
+      "index": 4,
+      "name": "N diagonal",
+      "connector": false,
+      "start_sample": 1461,
+      "end_sample": 2018,
+      "length_m": 0.029681644159311793,
+      "duration_s": 5.57
+    },
+    {
+      "index": 5,
+      "name": "N right up",
+      "connector": false,
+      "start_sample": 2018,
+      "end_sample": 2487,
+      "length_m": 0.024999999999999994,
+      "duration_s": 4.69
+    },
+    {
+      "index": 6,
+      "name": "N right retrace",
+      "connector": false,
+      "start_sample": 2487,
+      "end_sample": 2956,
+      "length_m": 0.024999999999999994,
+      "duration_s": 4.69
+    },
+    {
+      "index": 7,
+      "name": "N to R",
+      "connector": true,
+      "start_sample": 2956,
+      "end_sample": 3057,
+      "length_m": 0.005333333333333344,
+      "duration_s": 1.01
+    },
+    {
+      "index": 8,
+      "name": "R stem",
+      "connector": false,
+      "start_sample": 3057,
+      "end_sample": 3526,
+      "length_m": 0.024999999999999994,
+      "duration_s": 4.69
+    },
+    {
+      "index": 9,
+      "name": "R top",
+      "connector": false,
+      "start_sample": 3526,
+      "end_sample": 3662,
+      "length_m": 0.0072000000000000015,
+      "duration_s": 1.36
+    },
+    {
+      "index": 10,
+      "name": "R bowl upper",
+      "connector": false,
+      "start_sample": 3662,
+      "end_sample": 3886,
+      "length_m": 0.01190691743782069,
+      "duration_s": 2.24
+    },
+    {
+      "index": 11,
+      "name": "R bowl lower",
+      "connector": false,
+      "start_sample": 3886,
+      "end_sample": 4110,
+      "length_m": 0.011906917437820685,
+      "duration_s": 2.24
+    },
+    {
+      "index": 12,
+      "name": "R middle",
+      "connector": false,
+      "start_sample": 4110,
+      "end_sample": 4245,
+      "length_m": 0.007199999999999976,
+      "duration_s": 1.35
+    },
+    {
+      "index": 13,
+      "name": "R leg",
+      "connector": false,
+      "start_sample": 4245,
+      "end_sample": 4626,
+      "length_m": 0.02030394050424701,
+      "duration_s": 3.81
+    },
+    {
+      "index": 14,
+      "name": "R to S",
+      "connector": true,
+      "start_sample": 4626,
+      "end_sample": 4726,
+      "length_m": 0.005333333333333332,
+      "duration_s": 1.0
+    },
+    {
+      "index": 15,
+      "name": "S bottom",
+      "connector": false,
+      "start_sample": 4726,
+      "end_sample": 5079,
+      "length_m": 0.01879915567342884,
+      "duration_s": 3.53
+    },
+    {
+      "index": 16,
+      "name": "S lower",
+      "connector": false,
+      "start_sample": 5079,
+      "end_sample": 5299,
+      "length_m": 0.011723587917757329,
+      "duration_s": 2.2
+    },
+    {
+      "index": 17,
+      "name": "S upper",
+      "connector": false,
+      "start_sample": 5299,
+      "end_sample": 5519,
+      "length_m": 0.011723587917757345,
+      "duration_s": 2.2
+    },
+    {
+      "index": 18,
+      "name": "S top",
+      "connector": false,
+      "start_sample": 5519,
+      "end_sample": 5880,
+      "length_m": 0.01921074186545966,
+      "duration_s": 3.61
+    },
+    {
+      "index": 19,
+      "name": "S to frame",
+      "connector": true,
+      "start_sample": 5880,
+      "end_sample": 5974,
+      "length_m": 0.0050000000000000044,
+      "duration_s": 0.94
+    },
+    {
+      "index": 20,
+      "name": "Frame top right",
+      "connector": false,
+      "start_sample": 5974,
+      "end_sample": 6068,
+      "length_m": 0.0049999999999999975,
+      "duration_s": 0.94
+    },
+    {
+      "index": 21,
+      "name": "Frame right",
+      "connector": false,
+      "start_sample": 6068,
+      "end_sample": 6725,
+      "length_m": 0.035,
+      "duration_s": 6.57
+    },
+    {
+      "index": 22,
+      "name": "Frame bottom",
+      "connector": false,
+      "start_sample": 6725,
+      "end_sample": 8413,
+      "length_m": 0.08999999999999982,
+      "duration_s": 16.88
+    },
+    {
+      "index": 23,
+      "name": "Frame left",
+      "connector": false,
+      "start_sample": 8413,
+      "end_sample": 9070,
+      "length_m": 0.035,
+      "duration_s": 6.57
+    },
+    {
+      "index": 24,
+      "name": "Frame top close",
+      "connector": false,
+      "start_sample": 9070,
+      "end_sample": 10664,
+      "length_m": 0.08500000000000091,
+      "duration_s": 15.94
+    }
+  ]
+}
