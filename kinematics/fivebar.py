@@ -14,7 +14,6 @@ import math
 
 import numpy as np
 
-
 _RTOL = 1e-12
 
 

@@ -1,9 +1,9 @@
 """Hardware-free controller tests, including firmware-watchdog semantics."""
 
 import json
-from pathlib import Path
 import tempfile
 import unittest
+from pathlib import Path
 
 import numpy as np
 from numpy.testing import assert_allclose

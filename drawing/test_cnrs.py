@@ -1,8 +1,8 @@
 """Checks for pen continuity, timing, and the exported motor trajectory."""
 
 import tempfile
-from pathlib import Path
 import unittest
+from pathlib import Path
 
 import numpy as np
 from numpy.testing import assert_allclose

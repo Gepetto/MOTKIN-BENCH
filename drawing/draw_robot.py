@@ -2,13 +2,12 @@
 """Move to the first CSV pose, wait for Enter, then draw using motkin_pcb."""
 
 import argparse
+import time
 from collections import deque
 from pathlib import Path
-import time
 
 import numpy as np
 from motkin_pcb import MotorUsbController
-
 
 DEFAULT_KP = 12.0
 DEFAULT_KD = 0.3

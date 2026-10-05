@@ -1,9 +1,9 @@
 """Run from the repository root: python3 -m examples.haptic_ball"""
 
 import numpy as np
-from kinematics import fk, jacobian
-
 from motkin_pcb import MotorUsbController
+
+from kinematics import fk, jacobian
 
 CONTACT_FORCE = 0.5  # Constant outward force inside the ball [N]
 KT = 0.08  # GM3506 estimate [Nm/A]; replace with measured value

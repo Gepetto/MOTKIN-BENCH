@@ -1,7 +1,7 @@
 """Check force direction and torque/current units without opening USB."""
 
-import sys
 import runpy
+import sys
 import unittest
 from types import SimpleNamespace
 from unittest.mock import MagicMock, patch
