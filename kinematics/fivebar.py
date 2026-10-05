@@ -33,10 +33,12 @@ def elbow_positions(q1, q2, l1, d):
     _validate_lengths(l1, d)
     if not all(math.isfinite(q) for q in (q1, q2)):
         raise ValueError("Motor angles must be finite.")
-    return np.array([
-        [-d / 2 + l1 * math.sin(q1), l1 * math.cos(q1)],
-        [d / 2 + l1 * math.sin(q2), l1 * math.cos(q2)],
-    ])
+    return np.array(
+        [
+            [-d / 2 + l1 * math.sin(q1), l1 * math.cos(q1)],
+            [d / 2 + l1 * math.sin(q2), l1 * math.cos(q2)],
+        ]
+    )
 
 
 def _circle_intersections(c0, r0, c1, r1):
@@ -95,17 +97,17 @@ def ik_solutions(x, y, l1, l2, d, *, branch="upper"):
 
     tip = np.array([x, y], dtype=float)
     motors = np.array([[-d / 2, 0.0], [d / 2, 0.0]])
-    candidates = [
-        _circle_intersections(motor, l1, tip, l2) for motor in motors
-    ]
+    candidates = [_circle_intersections(motor, l1, tip, l2) for motor in motors]
     solutions = []
     tolerance = _RTOL * max(l1, l2, d)
     for e1 in candidates[0]:
         for e2 in candidates[1]:
-            angles = np.array([
-                math.atan2(elbow[0] - motor[0], elbow[1] - motor[1])
-                for elbow, motor in zip((e1, e2), motors)
-            ])
+            angles = np.array(
+                [
+                    math.atan2(elbow[0] - motor[0], elbow[1] - motor[1])
+                    for elbow, motor in zip((e1, e2), motors)
+                ]
+            )
             angles = (angles + math.pi) % (2 * math.pi) - math.pi
             # Use the same assembly choice as FK, so fk(*ik(...)) agrees.
             try:
@@ -157,9 +159,11 @@ def jacobian(q1, q2, l1, l2, d, *, branch="upper"):
     determinant = a[0, 0] * a[1, 1] - a[0, 1] * a[1, 0]
     if abs(determinant) <= _RTOL:
         raise ValueError("Parallel singularity: the Jacobian is undefined.")
-    elbow_derivatives = l1 * np.array([
-        [math.cos(q1), -math.sin(q1)],
-        [math.cos(q2), -math.sin(q2)],
-    ])
+    elbow_derivatives = l1 * np.array(
+        [
+            [math.cos(q1), -math.sin(q1)],
+            [math.cos(q2), -math.sin(q2)],
+        ]
+    )
     b = np.diag(np.sum(a * elbow_derivatives, axis=1))
     return np.linalg.solve(a, b)

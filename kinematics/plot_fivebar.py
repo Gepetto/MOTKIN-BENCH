@@ -35,7 +35,6 @@ def plot_configuration(q1, q2, l1, l2, d, *, branch="upper", ax=None):
     return ax
 
 
-
 if __name__ == "__main__":
     import matplotlib.pyplot as plt
 

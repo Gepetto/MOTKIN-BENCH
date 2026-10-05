@@ -41,15 +41,18 @@ def interpolate(t, timestamps, q, velocity):
     dt = timestamps[i + 1] - timestamps[i]
     u = (t - timestamps[i]) / dt
     position = (
-        (2*u**3 - 3*u*u + 1)*q[i] + (u**3 - 2*u*u + u)*dt*velocity[i]
-        + (-2*u**3 + 3*u*u)*q[i+1] + (u**3 - u*u)*dt*velocity[i+1]
+        (2 * u**3 - 3 * u * u + 1) * q[i]
+        + (u**3 - 2 * u * u + u) * dt * velocity[i]
+        + (-2 * u**3 + 3 * u * u) * q[i + 1]
+        + (u**3 - u * u) * dt * velocity[i + 1]
     )
     speed = (
-        (6*u*u - 6*u)/dt*q[i] + (3*u*u - 4*u + 1)*velocity[i]
-        + (-6*u*u + 6*u)/dt*q[i+1] + (3*u*u - 2*u)*velocity[i+1]
+        (6 * u * u - 6 * u) / dt * q[i]
+        + (3 * u * u - 4 * u + 1) * velocity[i]
+        + (-6 * u * u + 6 * u) / dt * q[i + 1]
+        + (3 * u * u - 2 * u) * velocity[i + 1]
     )
     return position, speed
-
 
 
 class SettlingWindow:
@@ -77,7 +80,9 @@ class SettlingWindow:
         intervals = np.diff(np.maximum(data[:, 0], cutoff))
         self.span = float(np.sum(intervals))
         if self.span > 0:
-            mean_squared = np.sum(data[:-1, 3:5]**2 * intervals[:, None], axis=0) / self.span
+            mean_squared = (
+                np.sum(data[:-1, 3:5] ** 2 * intervals[:, None], axis=0) / self.span
+            )
             self.rms_speed = np.sqrt(mean_squared)
         else:
             self.rms_speed = data[-1, 3:5].copy()
@@ -91,23 +96,55 @@ class SettlingWindow:
 
 
 def draw(
-    robot, trajectory, *, kp=DEFAULT_KP, kd=DEFAULT_KD,
-    approach_seconds=DEFAULT_APPROACH_SECONDS, control_rate=500.0,
-    timeout_ms=20, position_tolerance=0.03, speed_tolerance=0.1,
-    settle_timeout=5.0, settle_window=0.25, speed_multiplier=2.0,
-    prompt=input, clock=time.monotonic, sleep=time.sleep,
+    robot,
+    trajectory,
+    *,
+    kp=DEFAULT_KP,
+    kd=DEFAULT_KD,
+    approach_seconds=DEFAULT_APPROACH_SECONDS,
+    control_rate=500.0,
+    timeout_ms=20,
+    position_tolerance=0.03,
+    speed_tolerance=0.1,
+    settle_timeout=5.0,
+    settle_window=0.25,
+    speed_multiplier=2.0,
+    prompt=input,
+    clock=time.monotonic,
+    sleep=time.sleep,
 ):
     """Approach, wait for Enter, play the CSV, and hold for pen removal.
 
     Use inside a MotorUsbController context. CSV angles go directly to m0
     (left) and m1 (right): radians, clockwise-positive, zero at north.
     """
-    numeric = (kp, kd, approach_seconds, control_rate, position_tolerance,
-               speed_tolerance, settle_timeout, settle_window, speed_multiplier)
+    numeric = (
+        kp,
+        kd,
+        approach_seconds,
+        control_rate,
+        position_tolerance,
+        speed_tolerance,
+        settle_timeout,
+        settle_window,
+        speed_multiplier,
+    )
     if not np.isfinite(numeric).all():
         raise ValueError("Control settings must be finite.")
-    if min(kp, approach_seconds, control_rate, position_tolerance,
-           speed_tolerance, settle_timeout, settle_window, speed_multiplier) <= 0 or kd < 0:
+    if (
+        min(
+            kp,
+            approach_seconds,
+            control_rate,
+            position_tolerance,
+            speed_tolerance,
+            settle_timeout,
+            settle_window,
+            speed_multiplier,
+        )
+        <= 0
+        or kd < 0
+    ):
         raise ValueError("Control settings must be positive (kd may be zero).")
     if not 1 <= timeout_ms <= 65535 or 1000 / control_rate >= timeout_ms:
         raise ValueError("Watchdog must be 1..65535 ms and exceed the control period.")
@@ -153,8 +190,8 @@ def draw(
 
     def approach(t):
         u = t / approach_seconds
-        progress = u**3 * (10 - 15*u + 6*u*u)
-        progress_speed = 30*u*u*(1-u)**2 / approach_seconds
+        progress = u**3 * (10 - 15 * u + 6 * u * u)
+        progress_speed = 30 * u * u * (1 - u) ** 2 / approach_seconds
         return measured + delta * progress, delta * progress_speed
 
     stream(approach_seconds, approach)
@@ -174,7 +211,9 @@ def draw(
         if settling.ready(position_tolerance, speed_tolerance):
             break
         if now - start >= settle_timeout:
-            raise TimeoutError(f"Could not settle at the first pose within {settle_timeout:g} s.")
+            raise TimeoutError(
+                f"Could not settle at the first pose within {settle_timeout:g} s."
+            )
         sleep(period)
 
     # This sends timeout=0 to firmware AND waits for its echo before blocking.
@@ -194,16 +233,36 @@ def main():
     parser.add_argument("--port", help="Serial port; otherwise use the library default")
     parser.add_argument("--kp", type=float, default=DEFAULT_KP)
     parser.add_argument("--kd", type=float, default=DEFAULT_KD)
-    parser.add_argument("--approach-seconds", type=float, default=DEFAULT_APPROACH_SECONDS)
-    parser.add_argument("--speed-multiplier", type=float, default=2.0,
-                        help="Drawing playback speed factor (default: 2; 1 = CSV timing)")
-    parser.add_argument("--control-rate", type=float, default=500.0, help="USB command rate [Hz]")
-    parser.add_argument("--timeout-ms", type=int, default=20, help="Watchdog during motion [ms]")
-    parser.add_argument("--position-tolerance", type=float, default=0.03, help="Settling error [rad]")
-    parser.add_argument("--speed-tolerance", type=float, default=0.1, help="Settling RMS speed [rad/s]")
-    parser.add_argument("--settle-window", type=float, default=0.25, help="Settling RMS window [s]")
-    parser.add_argument("--settle-timeout", type=float, default=5.0, help="Settling timeout [s]")
-    parser.add_argument("--dry-run", action="store_true", help="Validate CSV without opening USB")
+    parser.add_argument(
+        "--approach-seconds", type=float, default=DEFAULT_APPROACH_SECONDS
+    )
+    parser.add_argument(
+        "--speed-multiplier",
+        type=float,
+        default=2.0,
+        help="Drawing playback speed factor (default: 2; 1 = CSV timing)",
+    )
+    parser.add_argument(
+        "--control-rate", type=float, default=500.0, help="USB command rate [Hz]"
+    )
+    parser.add_argument(
+        "--timeout-ms", type=int, default=20, help="Watchdog during motion [ms]"
+    )
+    parser.add_argument(
+        "--position-tolerance", type=float, default=0.03, help="Settling error [rad]"
+    )
+    parser.add_argument(
+        "--speed-tolerance", type=float, default=0.1, help="Settling RMS speed [rad/s]"
+    )
+    parser.add_argument(
+        "--settle-window", type=float, default=0.25, help="Settling RMS window [s]"
+    )
+    parser.add_argument(
+        "--settle-timeout", type=float, default=5.0, help="Settling timeout [s]"
+    )
+    parser.add_argument(
+        "--dry-run", action="store_true", help="Validate CSV without opening USB"
+    )
     args = parser.parse_args()
     if not np.isfinite(args.speed_multiplier) or args.speed_multiplier <= 0:
         parser.error("--speed-multiplier must be finite and strictly positive")
@@ -213,14 +272,19 @@ def main():
     if args.dry_run:
         return
 
-
     with MotorUsbController(port=args.port, timeout_ms=args.timeout_ms) as robot:
         draw(
-            robot, trajectory,
-            kp=args.kp, kd=args.kd, approach_seconds=args.approach_seconds,
-            control_rate=args.control_rate, timeout_ms=args.timeout_ms,
-            position_tolerance=args.position_tolerance, speed_tolerance=args.speed_tolerance,
-            settle_timeout=args.settle_timeout, settle_window=args.settle_window,
+            robot,
+            trajectory,
+            kp=args.kp,
+            kd=args.kd,
+            approach_seconds=args.approach_seconds,
+            control_rate=args.control_rate,
+            timeout_ms=args.timeout_ms,
+            position_tolerance=args.position_tolerance,
+            speed_tolerance=args.speed_tolerance,
+            settle_timeout=args.settle_timeout,
+            settle_window=args.settle_window,
             speed_multiplier=args.speed_multiplier,
         )
 
