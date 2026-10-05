@@ -5,6 +5,7 @@ import math
 import unittest
 
 import matplotlib
+
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
@@ -18,23 +19,25 @@ class FiveBarTests(unittest.TestCase):
     geometry = (0.06, 0.10, 0.10)
 
     def elbows(self, q, l1, d):
-        return np.array([
-            [-d / 2 + l1 * math.sin(q[0]), l1 * math.cos(q[0])],
-            [d / 2 + l1 * math.sin(q[1]), l1 * math.cos(q[1])],
-        ])
+        return np.array(
+            [
+                [-d / 2 + l1 * math.sin(q[0]), l1 * math.cos(q[0])],
+                [d / 2 + l1 * math.sin(q[1]), l1 * math.cos(q[1])],
+            ]
+        )
 
     def test_zero_angles_and_both_fk_branches(self):
         l1, l2, d = self.geometry
-        height = math.sqrt(l2**2 - (d / 2)**2)
+        height = math.sqrt(l2**2 - (d / 2) ** 2)
         assert_allclose(fk(0, 0, *self.geometry), [0, l1 + height])
-        assert_allclose(
-            fk(0, 0, *self.geometry, branch="lower"), [0, l1 - height]
-        )
+        assert_allclose(fk(0, 0, *self.geometry, branch="lower"), [0, l1 - height])
 
     def test_positive_quarter_turn_points_right(self):
         l1, l2, d = self.geometry
-        expected = [l1, math.sqrt(l2*l2 - d*d/4)]
-        assert_allclose(fk(math.pi/2, math.pi/2, *self.geometry), expected, atol=1e-13)
+        expected = [l1, math.sqrt(l2 * l2 - d * d / 4)]
+        assert_allclose(
+            fk(math.pi / 2, math.pi / 2, *self.geometry), expected, atol=1e-13
+        )
 
     def test_inverse_enumeration_and_open_closed_defaults(self):
         target = np.array([0.0, 0.12])
@@ -48,9 +51,7 @@ class FiveBarTests(unittest.TestCase):
             spacings.append(np.linalg.norm(elbows[1] - elbows[0]))
         self.assertEqual(spacings, sorted(spacings, reverse=True))
         assert_allclose(ik(*target, *self.geometry), solutions[0])
-        assert_allclose(
-            ik(*target, *self.geometry, elbows="closed"), solutions[-1]
-        )
+        assert_allclose(ik(*target, *self.geometry, elbows="closed"), solutions[-1])
         self.assertLess(solutions[0][0], 0)
         self.assertGreater(solutions[0][1], 0)
 
@@ -58,9 +59,7 @@ class FiveBarTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "branch"):
             ik(0, -0.12, *self.geometry)
         q = ik(0, -0.12, *self.geometry, branch="lower")
-        assert_allclose(
-            fk(*q, *self.geometry, branch="lower"), [0, -0.12], atol=1e-13
-        )
+        assert_allclose(fk(*q, *self.geometry, branch="lower"), [0, -0.12], atol=1e-13)
 
     def test_link_lengths_and_round_trips_over_workspace(self):
         rng = np.random.default_rng(42)
@@ -80,7 +79,9 @@ class FiveBarTests(unittest.TestCase):
                     recovered = ik(*tip, *geometry, branch=branch)
                     assert_allclose(
                         fk(*recovered, *geometry, branch=branch),
-                        tip, rtol=1e-10, atol=1e-11,
+                        tip,
+                        rtol=1e-10,
+                        atol=1e-11,
                     )
                     checked += 1
         self.assertGreater(checked, 250)
@@ -95,13 +96,16 @@ class FiveBarTests(unittest.TestCase):
                     analytic = jacobian(*q, *self.geometry, branch=branch)
                 except ValueError:
                     continue
-                numeric = np.column_stack([
-                    (
-                        fk(*(q + delta), *self.geometry, branch=branch)
-                        - fk(*(q - delta), *self.geometry, branch=branch)
-                    ) / (2 * step)
-                    for delta in np.eye(2) * step
-                ])
+                numeric = np.column_stack(
+                    [
+                        (
+                            fk(*(q + delta), *self.geometry, branch=branch)
+                            - fk(*(q - delta), *self.geometry, branch=branch)
+                        )
+                        / (2 * step)
+                        for delta in np.eye(2) * step
+                    ]
+                )
                 assert_allclose(analytic, numeric, rtol=2e-6, atol=1e-9)
                 checked += 1
         self.assertGreater(checked, 80)

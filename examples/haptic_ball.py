@@ -1,9 +1,9 @@
 """Run from the repository root: python3 -m examples.haptic_ball"""
 
 import numpy as np
-from kinematics import fk, jacobian
-
 from motkin_pcb import MotorUsbController
+
+from kinematics import fk, jacobian
 
 CONTACT_FORCE = 0.5  # Constant outward force inside the ball [N]
 KT = 0.08  # GM3506 estimate [Nm/A]; replace with measured value
@@ -17,7 +17,11 @@ with MotorUsbController(timeout_ms=20, max_command_rate_hz=500) as robot:
         delta = fk(*q, *GEOMETRY) - CENTER
         distance = np.linalg.norm(delta)
         direction = delta / distance if distance > 1e-12 else np.array([1.0, 0.0])
-        magnitude = CONTACT_FORCE + STIFFNESS * (RADIUS - distance) if distance < RADIUS - 1e-12 else 0.0
+        magnitude = (
+            CONTACT_FORCE + STIFFNESS * (RADIUS - distance)
+            if distance < RADIUS - 1e-12
+            else 0.0
+        )
         force = magnitude * direction
         tau = jacobian(*q, *GEOMETRY).T @ force
         for motor, current in zip((robot.m0, robot.m1), tau / KT):
