@@ -37,9 +37,9 @@ class HapticBallTests(unittest.TestCase):
                 with (
                     patch.dict(sys.modules, motkin_pcb=module),
                     patch.object(sys, "path", sys.path.copy()),
+                    self.assertRaises(KeyboardInterrupt),
                 ):
-                    with self.assertRaises(KeyboardInterrupt):
-                        runpy.run_module("examples.haptic_ball", run_name="__main__")
+                    runpy.run_module("examples.haptic_ball", run_name="__main__")
                 currents = []
                 for motor in (robot.m0, robot.m1):
                     command = motor.set.call_args.kwargs

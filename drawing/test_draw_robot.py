@@ -134,7 +134,7 @@ class ControllerTests(unittest.TestCase):
                 original = [array.copy() for array in self.trajectory]
 
                 def prompt(_):
-                    pauses.append((self.clock.now, len(self.robot.commands)))
+                    pauses.append((self.clock.now, len(self.robot.commands)))  # noqa: B023
 
                 options = {} if requested is None else {"speed_multiplier": requested}
                 self.run_draw(prompt, **options)
@@ -159,7 +159,7 @@ class ControllerTests(unittest.TestCase):
 
                 def prompt(_):
                     self.assertEqual(self.robot.commands[-1]["timeout_ms"], 0)
-                    raise error()
+                    raise error()  # noqa: B023
 
                 with self.assertRaises(error):
                     self.run_draw(prompt)
@@ -200,7 +200,7 @@ class ControllerTests(unittest.TestCase):
         self.assertTrue(self.robot.closed)
 
     def test_clockwise_commands_reconstruct_csv_path(self):
-        _, q, velocity = load_trajectory(DEFAULT_CSV)
+        _, q, _velocity = load_trajectory(DEFAULT_CSV)
         table = np.genfromtxt(DEFAULT_CSV, delimiter=",", names=True)
         tip = np.column_stack((table["x_m"], table["y_m"]))
         # Independent physical formula: clockwise from north gives +sin(q) in X.

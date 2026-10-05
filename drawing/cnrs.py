@@ -285,7 +285,7 @@ def sample_path(strokes, speed=0.010, rate=100.0):
 def motor_trajectory(strokes, geometry, speed=0.010, rate=100.0):
     """Follow the initial open IK mode continuously and compute motor speeds."""
     time, xy, xy_velocity, indices, info = sample_path(strokes, speed, rate)
-    l1, l2, d = geometry
+    l1, _l2, d = geometry
     motors = np.array([[-d / 2, 0.0], [d / 2, 0.0]])
 
     def elbow_mode(q, point):
