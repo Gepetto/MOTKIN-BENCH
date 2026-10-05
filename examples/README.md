@@ -6,7 +6,7 @@ Run the minimal script from the repository root:
 python3 -m examples.haptic_ball
 ```
 
-[`haptic_ball.py`](haptic_ball.py) finds `motor_usb` in the neighboring
+[`haptic_ball.py`](haptic_ball.py) finds `motkin_pcb` in the neighboring
 `pico_dual_PMSM_BUG79100G_DRV8316C/software` directory. Edit that path if
 needed; `pyserial` must be installed.
 

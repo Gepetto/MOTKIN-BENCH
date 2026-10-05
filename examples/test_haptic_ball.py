@@ -28,7 +28,7 @@ class HapticBallTests(unittest.TestCase):
                 robot.m0.q, robot.m1.q = q
                 robot.update.side_effect = KeyboardInterrupt
                 module = SimpleNamespace(MotorUsbController=controller)
-                with patch.dict(sys.modules, motor_usb=module), patch.object(sys, "path", sys.path.copy()):
+                with patch.dict(sys.modules, motkin_pcb=module), patch.object(sys, "path", sys.path.copy()):
                     with self.assertRaises(KeyboardInterrupt):
                         runpy.run_module("examples.haptic_ball", run_name="__main__")
                 currents = []

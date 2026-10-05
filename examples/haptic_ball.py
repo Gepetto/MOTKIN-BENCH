@@ -1,11 +1,9 @@
 """Run from the repository root: python3 -m examples.haptic_ball"""
-import sys
-from pathlib import Path
+
 import numpy as np
 from kinematics import fk, jacobian
 
-sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "pico_dual_PMSM_BUG79100G_DRV8316C/software"))
-from motor_usb import MotorUsbController
+from motkin_pcb import MotorUsbController
 
 CONTACT_FORCE = 0.5  # Constant outward force inside the ball [N]
 KT = 0.08  # GM3506 estimate [Nm/A]; replace with measured value
