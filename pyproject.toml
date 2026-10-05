@@ -1,0 +1,23 @@
+[project]
+name = "motkin-bench"
+version = "0.1.0"
+description = "low-cost platform with two permanent-magnet synchronous motors (PMSMs) for learning robotics and control on real hardware"
+readme = "README.md"
+authors = [
+    { name = "Thomas Flayols", email = "thomas.flayols@laas.fr" }
+]
+maintainers = [
+    { name = "Guilhem Saurel", email = "guilhem.saurel@laas.fr" }
+]
+requires-python = ">=3.10"
+dependencies = [
+    "motkin-pcb>=1.0.0",
+    "numpy>=2.2.6",
+]
+
+[tool.uv]
+package = false
+
+[build-system]
+requires = ["uv_build>=0.12.17,<0.13.0"]
+build-backend = "uv_build"

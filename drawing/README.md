@@ -45,12 +45,7 @@ The framed path contains 10,665 samples and lasts 106.64 seconds at 1×.
 
 ## Play on the robot
 
-The controller uses the [Pico dual-PMSM control library](https://github.com/thomasfla/pico_dual_PMSM_BU79100G_DRV8316C).
-It defaults to `motor_usb` from the neighboring
-`pico_dual_PMSM_BUG79100G_DRV8316C/software/motor_usb` directory.
-Install `pyserial` if needed. For another checkout, set `PYTHONPATH` to its
-`software` directory as described in the [root README](../README.md), or pass
-`--motor-usb-path /path/to/software/motor_usb`.
+The controller uses the [motkin_usb library](https://github.com/Gepetto/MOTKIN–PCB).
 
 With the pen raised:
 

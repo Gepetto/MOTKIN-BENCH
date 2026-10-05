@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
-"""Move to the first CSV pose, wait for Enter, then draw using motor_usb."""
+"""Move to the first CSV pose, wait for Enter, then draw using motkin_pcb."""
 
 import argparse
 from collections import deque
 from pathlib import Path
-import sys
 import time
 
 import numpy as np
+from motkin_pcb import MotorUsbController
 
 
 DEFAULT_KP = 12.0
@@ -15,10 +15,6 @@ DEFAULT_KD = 0.3
 DEFAULT_APPROACH_SECONDS = 2.0
 
 DEFAULT_CSV = Path(__file__).parent / "output" / "cnrs_trajectory.csv"
-DEFAULT_MOTOR_USB = (
-    Path(__file__).resolve().parents[2]
-    / "pico_dual_PMSM_BUG79100G_DRV8316C/software/motor_usb"
-)
 
 
 def load_trajectory(path):
@@ -195,8 +191,6 @@ def draw(
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("csv", nargs="?", type=Path, default=DEFAULT_CSV)
-    parser.add_argument("--motor-usb-path", type=Path, default=DEFAULT_MOTOR_USB,
-                        help="Path to the motor_usb package directory")
     parser.add_argument("--port", help="Serial port; otherwise use the library default")
     parser.add_argument("--kp", type=float, default=DEFAULT_KP)
     parser.add_argument("--kd", type=float, default=DEFAULT_KD)
@@ -219,8 +213,6 @@ def main():
     if args.dry_run:
         return
 
-    sys.path.insert(0, str(args.motor_usb_path.resolve().parent))
-    from motor_usb import MotorUsbController
 
     with MotorUsbController(port=args.port, timeout_ms=args.timeout_ms) as robot:
         draw(

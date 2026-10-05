@@ -35,7 +35,6 @@ plt.show()
 From the repository root:
 
 ```bash
-python3 -m pip install -r kinematics/requirements.txt
 python3 -m kinematics.plot_fivebar
 python3 -m unittest discover -s kinematics -v
 ```
