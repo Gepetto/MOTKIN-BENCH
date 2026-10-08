@@ -29,6 +29,12 @@ The motors use a custom [Raspberry Pi Pico dual-PMSM driver](https://github.com/
 | 1 set | PLA printed parts for the chosen setup — [Onshape CAD](https://cad.onshape.com/documents/581c9cc37f21d16430f878db/) |
 | 1 | Custom dual-PMSM motor driver — [GitHub](https://github.com/Gepetto/MOTKIN-PCB) |
 
+## Motor torque calibration
+
+GM3506 measured torque constant: **KT = 0.062 Nm/A**.
+
+![GM3506 torque versus Iq](Torque_vs_Iq.svg)
+
 ## Python examples
 
 Run commands from this repository's root. `kinematics` is a normal Python

@@ -17,14 +17,14 @@ class HapticBallTests(unittest.TestCase):
         cases = [
             ([0.03, 0], [0, 0]),
             ([0.02, 0], [0, 0]),
-            ([0.01, 0], [0.501, 0]),
-            ([-0.01, 0], [-0.501, 0]),
-            ([0, 0.01], [0, 0.501]),
-            ([0, -0.01], [0, -0.501]),
-            ([0.006, 0.008], [0.3006, 0.4008]),
-            ([0.019999, 0], [0.00105, 0]),
+            ([0.01, 0], [1.0, 0]),
+            ([-0.01, 0], [-1.0, 0]),
+            ([0, 0.01], [0, 1.0]),
+            ([0, -0.01], [0, -1.0]),
+            ([0.006, 0.008], [0.6, 0.8]),
+            ([0.019999, 0], [0.50005, 0]),
             ([0.020001, 0], [0, 0]),
-            ([0, 0], [1.001, 0]),
+            ([0, 0], [1.5, 0]),
         ]
         for offset, expected_force in cases:
             with self.subTest(offset=offset):
@@ -46,7 +46,7 @@ class HapticBallTests(unittest.TestCase):
                     self.assertEqual((command["kp"], command["kd"]), (0, 0))
                     currents.append(command["iff"])
                 force = np.linalg.solve(
-                    jacobian(*q, 0.06, 0.10, 0.10).T, np.array(currents) * 0.08
+                    jacobian(*q, 0.06, 0.10, 0.10).T, np.array(currents) * 0.062
                 )
                 assert_allclose(force, expected_force, atol=1e-12)
                 controller.assert_called_once_with(
